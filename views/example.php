@@ -1,6 +1,6 @@
 <?php
 $RepoClass = "Example";
-include_once("../core/view.php");
+require_once("core/view.php");
 ?>
 <html>
     <head>

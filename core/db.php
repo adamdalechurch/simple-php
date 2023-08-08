@@ -16,7 +16,7 @@ class DB {
        
         $mysqli = $this->_db;
 
-        $sql = "INSERT INTO $table (";
+        $sql = "INSERT INTO ".DBNAME.".$table (";
         foreach ($columns as $column) {
             $sql .= "$column, ";
         }
@@ -43,7 +43,7 @@ class DB {
             $sql .= "$column, ";
         }
         $sql = rtrim($sql, ", ");
-        $sql .= " FROM $table WHERE ";
+        $sql .= " FROM ".DBNAME.".$table WHERE ";
         foreach ($where as $key => $value) {
             $sql .= "$key = '".$mysqli->real_escape_string($value)."' AND ";
         }
@@ -62,7 +62,7 @@ class DB {
     public function update($table, $columns, $where){
         $mysqli = $this->_db;
 
-        $sql = "UPDATE $table SET ";
+        $sql = "UPDATE ".DBNAME.".$table SET ";
         foreach ($columns as $key => $value) {
             $sql .= "$key = '$value', ";
         }
@@ -77,7 +77,7 @@ class DB {
 
     public function delete($table, $where){
         $mysqli = $this->_db;
-        $sql = "DELETE FROM $table WHERE ";
+        $sql = "DELETE FROM ".DBNAME.".$table WHERE ";
         foreach ($where as $key => $value) {
             $sql .= "$key = '$value' AND ";
         }
@@ -104,7 +104,7 @@ class DB {
     public function create_table($table, $columns, $auto_increment = true, $other_constraints = []){
         $mysqli = $this->_db;
 
-        $sql = "CREATE TABLE $table (";
+        $sql = "CREATE TABLE ".DBNAME.".$table (";
         foreach ($columns as $key => $column) {
             $sql .= "$column->name $column->type";
 
@@ -143,18 +143,19 @@ class DB {
 
     public function drop_table($table){
         $mysqli = $this->_db;
-        $sql = "DROP TABLE $table";
+        $sql = "DROP TABLE ".DBNAME.".$table";
         $mysqli->query($sql);
     }
 
     public function truncate_table($table){
         $mysqli = $this->_db;
-        $sql = "TRUNCATE TABLE $table";
+        $sql = "TRUNCATE TABLE ".DBNAME.".$table";
         $mysqli->query($sql);
     }
 
     public function connect(){
-        $this->_db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        
+        $this->_db = new mysqli(DBHOST, DBUSER, DBPASS);
         if ($this->_db->connect_errno) {
             echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
         }

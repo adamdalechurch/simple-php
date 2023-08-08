@@ -1,11 +1,11 @@
 <?php
-include_once("../models/".strtolower($RepoClass).".php");
+require_once("data/".strtolower($RepoClass).".php");
 
-$repo = new $RepoClass($cols, $table, $id_name);
+$repo = new $RepoClass();
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        if(isset($_GET[$repo->id_name])){
+        if(isset($_GET[$repo->get_id_name()])){
             $result = $repo->get_by_id($id);
             echo json_encode($result);
         }

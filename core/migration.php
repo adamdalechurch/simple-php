@@ -19,7 +19,7 @@ class Migration {
 
     private function up(){
         foreach ($this->entities as $entity) {
-            include_once("../data/" . strtolower($entity) . ".php");
+            require_once("data/$entity.php");
             $entity = new $entity();
             $entity->create_table();
         }
@@ -27,7 +27,7 @@ class Migration {
 
     public function down(){
         foreach ($this->entities as $entity) {
-            include_once(strtolower($entity) . ".php");
+            require_once("data/$entity.php");
             $entity = new $entity();
             $entity->drop_table();
         }

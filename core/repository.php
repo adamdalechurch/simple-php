@@ -60,6 +60,10 @@ class Repository {
         return $foreign_key;
     }
 
+    public function list(){
+        return $this->_db->select($this->_table, $this->_columns, "");
+    }
+
     public function insert($records){
        return $this->_db->insert($this->_table, $records, $this->decode_columns($this->_columns));
     }

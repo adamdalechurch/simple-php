@@ -1,24 +1,23 @@
 <?php
-include_once("../core/repository.php");
+require_once("core/repository.php");
+
 class Example extends Repository {
     private $table = "example";
     private $id_name = "id";
     private $cols = '[
         {
             "name": "id",
-            "type": "INT",
+            "type": "int",
+            "length": 11,
             "primary_key": true,
             "auto_increment": true
         },
         {
             "name": "name",
-            "type": "VARCHAR(255)"
-        },
-        {
-            "name": "created_at",
-            "type": "TIMESTAMP",
-            "default": "CURRENT_TIMESTAMP"
-        },    
+            "type": "varchar",
+            "length": 255,
+            "unique_key": true
+        }
     ]';
 
     public function __construct(){

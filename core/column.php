@@ -7,6 +7,7 @@ class Column{
     public $foreign_key;
     public $unique_key;
     public $not_null;
+    public $default;
 
     public function __construct($column){
         $this->name = $column->name;
@@ -16,6 +17,7 @@ class Column{
         $this->foreign_key = isset($column->foreign_key) ? $column->foreign_key : false;
         $this->unique_key = isset($column->unique_key) ? $column->unique_key : false;
         $this->not_null = isset($column->not_null) ? $column->not_null : false;
+        $this->default = isset($column->default) ? $column->default : false;
     }
 }
 ?>
