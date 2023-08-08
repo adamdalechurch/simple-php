@@ -1,0 +1,29 @@
+<?php
+include_once("../models/".strtolower($RepoClass).".php");
+
+$repo = new $RepoClass($cols, $table, $id_name);
+
+switch ($_SERVER['REQUEST_METHOD']) {
+    case 'GET':
+        if(isset($_GET[$repo->id_name])){
+            $result = $repo->get_by_id($id);
+            echo json_encode($result);
+        }
+        break;
+    case 'POST':
+        $repo->insert($data);
+        break;
+    case 'PUT':
+        $repo->update($data, $id);
+        break;
+    case 'DELETE':
+        $repo->delete($id);
+        break;
+    default:
+        break;
+}
+
+$items = $repo->list();
+
+?>
+

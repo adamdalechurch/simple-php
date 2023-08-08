@@ -1,0 +1,169 @@
+<?php
+class DB {
+    private $_db;
+    private $debug;
+
+    public function __construct($debug = false){
+        $this->connect();
+        $this->debug = $debug;
+    }
+
+    public function __destruct(){
+        $this->_db->close();
+    }
+
+    public function insert($table, $records, $columns){
+       
+        $mysqli = $this->_db;
+
+        $sql = "INSERT INTO $table (";
+        foreach ($columns as $column) {
+            $sql .= "$column, ";
+        }
+        $sql = rtrim($sql, ", ");
+        $sql .= ") VALUES (";
+        foreach ($columns as $column) {
+            $record = $records[$column];
+            $sql .= "'".$mysqli->real_escape_string($record)."', ";
+        }
+        $sql = rtrim($sql, ", ");
+        $sql .= ")";
+
+        $this->debug($sql);
+
+        $mysqli->query($sql);
+        return $mysqli->insert_id;       
+    }
+
+    public function select($table, $columns, $where){
+        $mysqli = $this->_db;
+
+        $sql = "SELECT ";
+        foreach ($columns as $column) {
+            $sql .= "$column, ";
+        }
+        $sql = rtrim($sql, ", ");
+        $sql .= " FROM $table WHERE ";
+        foreach ($where as $key => $value) {
+            $sql .= "$key = '".$mysqli->real_escape_string($value)."' AND ";
+        }
+        $sql = rtrim($sql, " AND ");
+        $result = $mysqli->query($sql);
+        $rows = array();
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        $this->debug($sql);
+
+        return $rows;
+    }
+
+    public function update($table, $columns, $where){
+        $mysqli = $this->_db;
+
+        $sql = "UPDATE $table SET ";
+        foreach ($columns as $key => $value) {
+            $sql .= "$key = '$value', ";
+        }
+        $sql = rtrim($sql, ", ");
+        $sql .= " WHERE ";
+        foreach ($where as $key => $value) {
+            $sql .= "$key = '".$mysqli->real_escape_string($value)." AND ";
+        }
+        $sql = rtrim($sql, " AND ");
+        $mysqli->query($sql);
+    }
+
+    public function delete($table, $where){
+        $mysqli = $this->_db;
+        $sql = "DELETE FROM $table WHERE ";
+        foreach ($where as $key => $value) {
+            $sql .= "$key = '$value' AND ";
+        }
+        $sql = rtrim($sql, " AND ");
+        $mysqli->query($sql);
+    }
+
+    public function query($sql){
+        $mysqli = $this->_db;
+        $result = $mysqli->query($sql);
+        $rows = array();
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
+    public function execute($sql){
+        $mysqli = $this->_db;
+        return $mysqli->query($sql);
+    }
+
+    // foreign keys, unique keys, and primary keys will be properties on columns array now
+    public function create_table($table, $columns, $auto_increment = true, $other_constraints = []){
+        $mysqli = $this->_db;
+
+        $sql = "CREATE TABLE $table (";
+        foreach ($columns as $key => $column) {
+            $sql .= "$column->name $column->type";
+
+            if($column->primary_key){
+                $sql .= " PRIMARY KEY NOT NULL".($column->auto_increment ?  " AUTO_INCREMENT" : "" );
+            } else if ($column->not_null){
+                $sql .= " NOT NULL";
+            }
+
+            $sql .= $column->default ? " DEFAULT $column->default" : "";
+
+            $sql .= ", ";
+        }
+
+        // foreign keys, unique keys, and primary keys will be properties on columns array now
+        foreach ($columns as $key => $column) {
+            if($column->foreign_key){
+                $sql .= "FOREIGN KEY ($column->name) REFERENCES $column->foreign_key, ";
+            }
+            if($column->unique_key){
+                $sql .= "UNIQUE ($column->name), ";
+            }
+        }
+
+        $sql = rtrim($sql, ", ");
+        $sql .= ")";
+
+        if(count($other_constraints) > 0)
+            $sql .= implode(";\n ", $other_constraints);
+
+        $this->debug($sql);
+
+        $mysqli->query($sql);
+        
+    }
+
+    public function drop_table($table){
+        $mysqli = $this->_db;
+        $sql = "DROP TABLE $table";
+        $mysqli->query($sql);
+    }
+
+    public function truncate_table($table){
+        $mysqli = $this->_db;
+        $sql = "TRUNCATE TABLE $table";
+        $mysqli->query($sql);
+    }
+
+    public function connect(){
+        $this->_db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        if ($this->_db->connect_errno) {
+            echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+        }
+    }
+
+    private function debug($sql){
+        if($this->debug){
+            echo $sql;
+            exit();
+        }
+    }
+}
