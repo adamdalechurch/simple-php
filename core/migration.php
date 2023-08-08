@@ -7,8 +7,8 @@ class Migration {
     
     public function __construct(){
         $this->db = new DB();
-        // if($this->create_db());
-            // $this->up();
+        if($this->create_db());
+            $this->up();
     }
 
     private function create_db(){
