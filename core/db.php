@@ -1,10 +1,10 @@
 <?php
-include_once("traits/queriable.php");
+include_once("traits/queryable.php");
 include_once("traits/executable.php");
 include_once("traits/implements_table.php");
 
 class DB {
-    use Queriable, Executable, ImplementsTable;
+    use Queryable, Executable, ImplementsTable;
     private $_db;
     private $debug;
 

@@ -1,6 +1,6 @@
 <?php
 
-trait Queriable{
+trait Queryable{
     public function select($table, $columns = [], $where = [], $group_by = [], $order_by = [], $limit = []){
         $mysqli = $this->_db;
 
