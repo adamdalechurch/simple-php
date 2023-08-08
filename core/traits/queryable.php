@@ -1,7 +1,7 @@
 <?php
 
 trait Queryable{
-    public function select($table, $columns = [], $where = [], $group_by = [], $order_by = [], $limit = []){
+    public function select($table, $columns = [], $where = [], $group_by = [], $order_by = [], $offset = null, $limit = []){
         $mysqli = $this->_db;
 
         $sql = "SELECT " . $this->get_column_names_str($columns);
@@ -30,6 +30,10 @@ trait Queryable{
             $sql = rtrim($sql, ", ");
         }
 
+        if($offset){
+            $sql .= " OFFSET $offset";
+        }
+
         if($limit && is_array($limit) && count($limit) > 0){
             $sql .= " LIMIT ";
             foreach ($limit as $key => $value) {
@@ -37,6 +41,7 @@ trait Queryable{
             }
             $sql = rtrim($sql, ", ");
         }
+        
        
         $sql = rtrim($sql, " AND ");
         $result = $mysqli->query($sql);

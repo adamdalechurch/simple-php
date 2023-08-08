@@ -9,6 +9,7 @@ class Repository {
     private $_id_name;
     private $_auto_increment;
     private $_other_constraints;
+
     public function __construct($columns, $table, $id_name, 
     $auto_increment = true, $other_constraints = [], $debug = false){
         $this->_db = new DB($debug);
@@ -63,8 +64,9 @@ class Repository {
         return $foreign_key;
     }
 
-    public function list(){
-        return $this->_db->select($this->_table);
+    // add paging params
+    public function list($where = null, $order_by = null, $limit = null, $offset = null){
+        return $this->_db->select($this->_table, $this->_columns, $where, [], $order_by, $limit, $offset);
     }
 
     public function insert($records){
@@ -92,7 +94,7 @@ class Repository {
     }
 
     public function get_columns(){
-        return decode_columns($this->_columns);
+        return $this->decode_columns($this->_columns);
     }
 
     function decode_columns($columns){

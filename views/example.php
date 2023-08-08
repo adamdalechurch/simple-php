@@ -1,17 +1,14 @@
 <?php
-$RepoClass = "Example";
 require_once("core/view.php");
+$view = new View("Example");
 ?>
 <html>
     <head>
         <title>Example</title>
     </head>
     <body>
-        <form method="POST">
-            <input type="text" name="name">
-            <input type="hidden" name="id" >
-            <input type="submit" value="Submit">
-        </form>
+        <?php echo $view->create_form(); ?>
+        <?php echo $view->list(); ?>
     </body>
 </html>
 
