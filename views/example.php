@@ -9,7 +9,14 @@ require_once("core/view.php");
     <body>
         <form method="POST">
             <input type="text" name="name">
+            <input type="hidden" name="id" >
             <input type="submit" value="Submit">
         </form>
     </body>
 </html>
+
+<?php
+    foreach ($items as $item) {
+        echo $item["id"]." ".$item["name"]. "<br>";
+    }
+?>
