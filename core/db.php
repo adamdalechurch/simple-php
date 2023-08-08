@@ -12,22 +12,19 @@ class DB {
         $this->_db->close();
     }
 
+    public function set_debug($debug){
+        $this->debug = $debug;
+    }
+
     public function insert($table, $records, $columns){
        
         $mysqli = $this->_db;
 
-        $sql = "INSERT INTO ".DBNAME.".$table (";
-        foreach ($columns as $column) {
-            $sql .= "$column, ";
-        }
-        $sql = rtrim($sql, ", ");
-        $sql .= ") VALUES (";
-        foreach ($columns as $column) {
-            $record = $records[$column];
-            $sql .= "'".$mysqli->real_escape_string($record)."', ";
-        }
-        $sql = rtrim($sql, ", ");
+
+        $sql = "INSERT INTO ".DBNAME.".$table (". $this->get_column_names_str($columns, false);
+        $sql .= ") VALUES (". $this->get_insert_values($records, $columns, false);
         $sql .= ")";
+        $this->debug = true;
 
         $this->debug($sql);
 
@@ -35,26 +32,56 @@ class DB {
         return $mysqli->insert_id;       
     }
 
-    public function select($table, $columns, $where){
+    public function select($table, $columns = [], $where = [], $group_by = [], $order_by = [], $limit = []){
         $mysqli = $this->_db;
 
         $sql = "SELECT ";
-        foreach ($columns as $column) {
-            $sql .= "$column, ";
+
+        $sql .= $this->get_column_names_str($columns);
+
+        $sql .= " FROM ".DBNAME.".$table";
+
+        if($where && is_array($where) && count($where) > 0){
+            $sql .= " WHERE ";
+            foreach ($where as $key => $value) {
+                $sql .= "$key = '".$mysqli->real_escape_string($value)."' AND ";
+            }
+        } 
+
+        if($group_by && is_array($group_by) && count($group_by) > 0){
+            $sql .= " GROUP BY ";
+            foreach ($group_by as $key => $value) {
+                $sql .= "$value, ";
+            }
+            $sql = rtrim($sql, ", ");
         }
-        $sql = rtrim($sql, ", ");
-        $sql .= " FROM ".DBNAME.".$table WHERE ";
-        foreach ($where as $key => $value) {
-            $sql .= "$key = '".$mysqli->real_escape_string($value)."' AND ";
+
+        if($order_by && is_array($order_by) && count($order_by) > 0){
+            $sql .= " ORDER BY ";
+            foreach ($order_by as $key => $value) {
+                $sql .= "$key $value, ";
+            }
+            $sql = rtrim($sql, ", ");
         }
+
+        if($limit && is_array($limit) && count($limit) > 0){
+            $sql .= " LIMIT ";
+            foreach ($limit as $key => $value) {
+                $sql .= "$value, ";
+            }
+            $sql = rtrim($sql, ", ");
+        }
+       
         $sql = rtrim($sql, " AND ");
         $result = $mysqli->query($sql);
         $rows = array();
+
+        $this->debug($sql);
+
         while ($row = $result->fetch_assoc()) {
             $rows[] = $row;
         }
 
-        $this->debug($sql);
 
         return $rows;
     }
@@ -89,6 +116,9 @@ class DB {
         $mysqli = $this->_db;
         $result = $mysqli->query($sql);
         $rows = array();
+
+        $this->debug($sql);
+
         while ($row = $result->fetch_assoc()) {
             $rows[] = $row;
         }
@@ -153,6 +183,37 @@ class DB {
         $mysqli = $this->_db;
         $sql = "TRUNCATE TABLE ".DBNAME.".$table";
         $mysqli->query($sql);
+    }
+
+    private function get_column_names_str($columns, $for_select = true){
+        $cols = "";
+        if($columns && is_array($columns) && count($columns) > 0){
+            // $cols = implode(", ", array_map(function($column){
+            foreach ($columns as $column) {
+                if($for_select || !$column->auto_increment) // auto_increment columns cannot be inserted into
+                    $cols .= $column->name . ", ";
+            }
+            $cols = rtrim($cols, ", ");
+        } else {
+            $cols = "*";
+        }
+
+        return $cols;
+    }
+
+    private function get_insert_values_str($records, $columns){
+        $values = "";
+        foreach ($records as $record) {
+            $values .= "(";
+            foreach ($columns as $column) {
+                if($for_select || !$column->auto_increment) // auto_increment columns cannot be inserted into
+                    $values .= "'".$this->_db->real_escape_string($record[$column->name])."', ";
+            }
+            $values = rtrim($values, ", ");
+            $values .= "), ";
+        }
+        $values = rtrim($values, ", ");
+        return $values;
     }
 
     public function connect(){

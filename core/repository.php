@@ -20,7 +20,7 @@ class Repository {
     }
 
     public function set_debug($debug){
-        $this->debug = $debug;
+        $this->_db->set_debug($debug);
     }
 
     public function get_by_id($id){
@@ -64,7 +64,7 @@ class Repository {
     }
 
     public function list(){
-        return $this->_db->select($this->_table, $this->_columns, "");
+        return $this->_db->select($this->_table);
     }
 
     public function insert($records){
