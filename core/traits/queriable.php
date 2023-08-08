@@ -1,14 +1,10 @@
 <?php
 
 trait Queriable{
-
     public function select($table, $columns = [], $where = [], $group_by = [], $order_by = [], $limit = []){
         $mysqli = $this->_db;
 
-        $sql = "SELECT ";
-
-        $sql .= $this->get_column_names_str($columns);
-
+        $sql = "SELECT " . $this->get_column_names_str($columns);
         $sql .= " FROM ".DBNAME.".$table";
 
         if($where && is_array($where) && count($where) > 0){
