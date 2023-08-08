@@ -3,7 +3,6 @@ require_once("data/".strtolower($RepoClass).".php");
 
 $repo = new $RepoClass();
 
-
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         if(isset($_GET[$repo->get_id_name()])){

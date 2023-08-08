@@ -20,11 +20,9 @@ class DB {
        
         $mysqli = $this->_db;
 
-
         $sql = "INSERT INTO ".DBNAME.".$table (". $this->get_column_names_str($columns, false);
-        $sql .= ") VALUES (". $this->get_insert_values($records, $columns, false);
+        $sql .= ") VALUES (". $this->get_insert_values_str($records, $columns, false);
         $sql .= ")";
-        $this->debug = true;
 
         $this->debug($sql);
 
@@ -203,15 +201,19 @@ class DB {
 
     private function get_insert_values_str($records, $columns){
         $values = "";
-        foreach ($records as $record) {
-            $values .= "(";
+        $values .= "(";
+        if($columns && is_array($columns) && count($columns) > 0){
             foreach ($columns as $column) {
-                if($for_select || !$column->auto_increment) // auto_increment columns cannot be inserted into
-                    $values .= "'".$this->_db->real_escape_string($record[$column->name])."', ";
+                if(!$column->auto_increment)
+                    $values .= "'".$this->_db->real_escape_string($records[$column->name])."', ";
             }
-            $values = rtrim($values, ", ");
-            $values .= "), ";
+        } else {
+            foreach ($records as $key => $value) {
+                $values .= "'".$this->_db->real_escape_string($value)."', ";
+            }
         }
+        $values = rtrim($values, ", ");
+        $values .= "), ";
         $values = rtrim($values, ", ");
         return $values;
     }
