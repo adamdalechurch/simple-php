@@ -106,7 +106,7 @@ class DB {
 
         $sql = "CREATE TABLE ".DBNAME.".$table (";
         foreach ($columns as $key => $column) {
-            $sql .= "$column->name $column->type";
+            $sql .= "$column->name $column->type". ($column->length ? "($column->length)" : "");
 
             if($column->primary_key){
                 $sql .= " PRIMARY KEY NOT NULL".($column->auto_increment ?  " AUTO_INCREMENT" : "" );
@@ -125,12 +125,14 @@ class DB {
                 $sql .= "FOREIGN KEY ($column->name) REFERENCES $column->foreign_key, ";
             }
             if($column->unique_key){
-                $sql .= "UNIQUE ($column->name), ";
+                $sql .= "UNIQUE KEY ($column->name), ";
             }
         }
 
         $sql = rtrim($sql, ", ");
         $sql .= ")";
+
+        $sql .= " ENGINE=".DBENGINE." DEFAULT CHARSET=".DBCHARSET;
 
         if(count($other_constraints) > 0)
             $sql .= implode(";\n ", $other_constraints);

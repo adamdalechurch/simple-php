@@ -23,7 +23,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 }
 
+$repo->set_debug(true);
 $items = $repo->list();
-
+$repo->set_debug(false);
 ?>
 

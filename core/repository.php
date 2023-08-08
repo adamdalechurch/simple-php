@@ -9,7 +9,6 @@ class Repository {
     private $_id_name;
     private $_auto_increment;
     private $_other_constraints;
-
     public function __construct($columns, $table, $id_name, 
     $auto_increment = true, $other_constraints = [], $debug = false){
         $this->_db = new DB($debug);
@@ -18,6 +17,10 @@ class Repository {
         $this->_id_name = $id_name;
         $this->_auto_increment = $auto_increment;
         $this->_other_constraints = $other_constraints;
+    }
+
+    public function set_debug($debug){
+        $this->debug = $debug;
     }
 
     public function get_by_id($id){

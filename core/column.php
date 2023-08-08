@@ -2,6 +2,7 @@
 class Column{
     public $name;
     public $type;
+    public $length;
     public $primary_key;
     public $auto_increment;
     public $foreign_key;
@@ -12,6 +13,7 @@ class Column{
     public function __construct($column){
         $this->name = $column->name;
         $this->type = $column->type;
+        $this->length = isset($column->length) ? $column->length : false;
         $this->primary_key = isset($column->primary_key) ? $column->primary_key : false;
         $this->auto_increment = isset($column->auto_increment) ? $column->auto_increment : false;
         $this->foreign_key = isset($column->foreign_key) ? $column->foreign_key : false;

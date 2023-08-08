@@ -2,7 +2,6 @@
 include_once("db.php");
 
 class Migration {
-    private $db_name = "mugshot_game";
     private $entities = ['Example'];
     private $db;
     
@@ -13,7 +12,7 @@ class Migration {
     }
 
     private function create_db(){
-        $sql = "CREATE DATABASE IF NOT EXISTS $this->db_name";
+        $sql = "CREATE DATABASE IF NOT EXISTS ".DBNAME;        
         return $this->db->execute($sql);
     }
 
