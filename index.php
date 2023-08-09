@@ -1,6 +1,6 @@
 <?php
 // load constants from .env
-require_once('.env');
+require_once('core/config.php');
 
 // run migrations
 require_once('core/migration.php');
