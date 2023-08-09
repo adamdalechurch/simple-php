@@ -6,12 +6,23 @@ class View {
     private $items;
     private $RepoClass;
     private $api;
+    private $styles = [
+        "https://classless.de/classless.css",
+        "https://classless.de/addons/themes.css"
+    ];
+
+    private $scripts = [
+        "https://code.jquery.com/jquery-3.3.1.js",
+        "https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"
+    ];
 
     public function __construct($RepoClass){
         $this->RepoClass = $RepoClass;
         require_once("data/".strtolower($RepoClass).".php");
         $this->repo = new $RepoClass();
         $this->api = new Api($this->repo);
+        $this->push_default_scripts();
+        $this->push_default_styles();
     }
 
     public function create_form(){
@@ -23,7 +34,7 @@ class View {
             $form .= "<label for='$column->name'>$column->name</label>";
             $form .= "<input type='text' name='$column->name' id='$column->name' />";
         }
-        $form .= "<input type='submit' value='Create' />";
+        $form .= $this->button("void(0)", "Create", "submit");
         $form .= "</form>";
         return $form;
     }
@@ -39,7 +50,7 @@ class View {
             else 
                 $form .= "<input type='text' name='$column->name' id='$column->name' />";
         }
-        $form .= "<input type='submit' value='Update' />";
+        $form .= $this->button("void(0)", "Update", "submit");
         $form .= "</form>";
         return $form;
     }
@@ -51,7 +62,7 @@ class View {
         $table .= "<thead>";
         $table .= "<tr>";
         foreach ($columns as $column) {
-            $table .= "<th>$column->name</th>";
+            $table .= "<th style='width:".$this->column_width($columns, $column)."%'>$column->name</th>";
         }
         $table .= "<th>Actions</th>";
         $table .= "</tr>";
@@ -60,17 +71,83 @@ class View {
         foreach ($this->items as $item) {
             $table .= "<tr>";
             foreach ($columns as $column) {
-                $table .= "<td>".$item[$column->name]."</td>";
+                $table .= "<td style='width:".$this->column_width($columns, $column)."%'>".$item[$column->name]."</td>";
             }
             $table .= "<td>";
-            $table .= "<a href='?action=update&id=$item[id]'>Update</a>";
-            $table .= "<a href='?action=delete&id=$item[id]'>Delete</a>";
+            $table .= $this->button("window.location.href='?action=update&id=$item[id]'", "Update");
+            $table .= $this->button("window.location.href='?action=delete&id=$item[id]'", "Delete");
             $table .= "</td>";
             $table .= "</tr>";
         }
         $table .= "</tbody>";
         $table .= "</table>";
         return $table;
+    }
+
+    public function head(){
+        $head = "<head>";
+        $head .= "<title>$this->RepoClass</title>";
+        foreach ($this->styles as $style) {
+            $head .= "<link rel='stylesheet' href='$style' />";
+        }
+        foreach ($this->scripts as $script) {
+            $head .= "<script src='$script'></script>";
+        }
+        $head .= "</head>";
+        return $head;
+    }
+
+    public function footer(){
+        // with scripts:
+        $footer = "";  
+        foreach ($this->scripts as $script) {
+            $footer .= "<script src='$script'></script>";
+        }
+    }
+
+    private function push_default_scripts(){
+        foreach (scandir("core/js") as $file) {
+            if($file == "." || $file == "..")
+                continue;
+            $this->scripts[] = "core/js/$file";
+        }
+    }
+
+    private function push_default_styles(){
+        foreach (scandir("core/style") as $file) {
+            if($file == "." || $file == "..")
+                continue;
+            $this->styles[] = "core/style/$file";
+        }
+    }
+
+    public function button($onclick, $text, $type = "button"){
+        return "<button type='$type' onclick='$onclick'>$text</button>";
+    }
+
+    public function column_width($columns, $column){
+        // calculate the width of a column based on the following
+        // 1. INTS receive a column value mulitplier of 2
+        // 2. VARCHARS receive a column value multiplier of 4
+        // 3. TINYINTS receive a column value multiplier of 1
+        $width_multiplier = 0;
+        switch ($column->type) {
+            case 'int':
+                $width_multiplier = 2;
+                break;
+            case 'varchar':
+                $width_multiplier = 4;
+                break;
+            case 'tinyint':
+                $width_multiplier = 1;
+                break;
+            default:
+                $width_multiplier = 4;
+                break;
+        }
+        
+        // base value should = .25
+        return (100 / count($columns)) * ($width_multiplier * .25) ;
     }
 }
 
