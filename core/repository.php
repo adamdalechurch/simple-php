@@ -1,6 +1,8 @@
 <?php
-include_once("db.php");
-include_once("column.php");
+namespace SimplePHP\Core;
+
+use SimplePHP\Core\DB;
+use SimplePHP\Core\Models\Column;
 
 class Repository {
     private $_db;

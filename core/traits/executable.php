@@ -1,4 +1,6 @@
 <?php
+namespace SimplePHP\Core\Traits;
+
 trait Executable{
     public function insert($table, $records, $columns){
        

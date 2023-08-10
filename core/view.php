@@ -1,5 +1,7 @@
 <?php
-require_once("core/api.php");
+namespace SimplePHP\Core;
+
+use SimplePHP\Core\Api;
 
 class View {
     private $repo;
@@ -17,9 +19,8 @@ class View {
     ];
 
     public function __construct($RepoClass){
-        $this->RepoClass = $RepoClass;
-        require_once("data/".strtolower($RepoClass).".php");
-        $this->repo = new $RepoClass();
+        $this->RepoClass = NAMESPACE_DATA.basename($RepoClass, ".php");
+        $this->repo = new $this->RepoClass();
         $this->api = new Api($this->repo);
         $this->push_default_scripts();
         $this->push_default_styles();

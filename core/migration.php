@@ -1,8 +1,9 @@
 <?php
-include_once("db.php");
+namespace SimplePHP\Core;
+
+use SimplePHP\Core\DB;
 
 class Migration {
-    private $entities = ['Example'];
     private $db;
     
     public function __construct(){
@@ -17,18 +18,19 @@ class Migration {
     }
 
     private function up(){
-        foreach ($this->entities as $entity) {
-            require_once("data/$entity.php");
-            $entity = new $entity();
-            $entity->create_table();
+        //loop through all classes in the data namespace
+        foreach (glob("data/*.php") as $filename) {
+            $repo = NAMESPACE_DATA.basename($filename, ".php");
+            $repo = new $repo();
+            $repo->create_table();
         }
     }
 
     public function down(){
         foreach ($this->entities as $entity) {
-            require_once("data/$entity.php");
-            $entity = new $entity();
-            $entity->drop_table();
+            $repo = NAMESPACE_DATA.basename($filename, ".php");
+            $repo = new $repo();
+            $repo->drop_table();
         }
     }
 }

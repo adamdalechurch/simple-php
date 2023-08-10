@@ -1,4 +1,6 @@
 <?php
+namespace SimplePHP\Core\Traits;
+
 trait ImplementsTable {
         // foreign keys, unique keys, and primary keys will be properties on columns array now
         public function create_table($table, $columns, $auto_increment = true, $other_constraints = []){

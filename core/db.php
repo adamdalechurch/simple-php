@@ -1,7 +1,12 @@
 <?php
-include_once("traits/queryable.php");
-include_once("traits/executable.php");
-include_once("traits/implements_table.php");
+
+namespace SimplePHP\Core;
+
+use SimplePHP\Core\Traits\Queryable;
+use SimplePHP\Core\Traits\Executable;
+use SimplePHP\Core\Traits\ImplementsTable;
+
+use \mysqli;
 
 class DB {
     use Queryable, Executable, ImplementsTable;

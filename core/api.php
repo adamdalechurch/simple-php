@@ -1,4 +1,6 @@
 <?php
+namespace SimplePHP\Core;
+
 class Api{
     
     private $repo;

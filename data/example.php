@@ -1,5 +1,7 @@
 <?php
-require_once("core/repository.php");
+namespace SimplePHP\Data;
+
+use SimplePHP\Core\Repository;
 
 class Example extends Repository {
     private $table = "example";

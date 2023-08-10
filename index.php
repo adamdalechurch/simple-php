@@ -1,9 +1,13 @@
 <?php
+namespace SimplePHP;
+
+use SimplePHP\Core\Migration;
+
 // load constants from .env
 require_once('core/config.php');
 
-// run migrations
-require_once('core/migration.php');
+// load composer
+require_once('vendor/autoload.php');
 
 $migration = new Migration();
 

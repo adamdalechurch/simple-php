@@ -1,4 +1,5 @@
 <?php
+namespace SimplePHP\Core\Traits;
 
 trait Queryable{
     public function select($table, $columns = [], $where = [], $group_by = [], $order_by = [], $offset = null, $limit = []){

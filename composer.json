@@ -1,0 +1,22 @@
+{
+    "name": "adamdchurch/simple-php",
+    "description": "A simple php framework.",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Adam Church",
+            "email": "adamdchurch92@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SimplePHP\\": "/",
+            "SimplePHP\\Core\\": "core/",
+            "SimplePHP\\Core\\Traits\\": "core/traits/",
+            "SimplePHP\\Core\\Models\\": "core/models/",
+            "SimplePHP\\Views\\": "views/",
+            "SimplePHP\\Data\\": "data/"
+        }
+    },
+    "require": {}
+}

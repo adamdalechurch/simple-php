@@ -1,4 +1,6 @@
 <?php
+namespace SimplePHP\Core\Models;
+
 class Column{
     public $name;
     public $type;

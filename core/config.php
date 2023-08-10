@@ -12,5 +12,9 @@ define('DBDEBUG', true);
 define('DBPORT', 3306);
 define('DBSOCKET', '');
 define('DBDRIVER', 'mysql');
+
+define('NAMESPACE_DATA', '\\SimplePHP\\Data\\');
+define('NAMESPACE_VIEWS', '\\SimplePHP\\Views\\');
+
 ?>
 
