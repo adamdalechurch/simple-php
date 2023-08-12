@@ -13,8 +13,10 @@ define('DBPORT', 3306);
 define('DBSOCKET', '');
 define('DBDRIVER', 'mysql');
 
-define('NAMESPACE_DATA', '\\SimplePHP\\Data\\');
-define('NAMESPACE_VIEWS', '\\SimplePHP\\Views\\');
+define('NAMESPACE_DATA', '\\SimplePHP\\App\\Data\\');
+define('NAMESPACE_VIEWS', '\\SimplePHP\\App\\Views\\');
+define('NAMESPACE_CONTROLLERS', '\\SimplePHP\\App\\Controllers\\');
+define('DEFAULT_CONTROLLER', NAMESPACE_CONTROLLERS . 'DefaultController');
 
 ?>
 

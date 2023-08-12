@@ -1,5 +1,5 @@
 <?php
-namespace SimplePHP\Core;
+namespace SimplePHP\Core\Infrastructure;
 
 use SimplePHP\Core\DB;
 use SimplePHP\Core\Models\Column;

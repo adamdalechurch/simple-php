@@ -1,7 +1,9 @@
 <?php
-namespace SimplePHP\Views;
+namespace SimplePHP\App\Views;
 
-$view = new \SimplePHP\Core\View("Example");
+use SimplePHP\Core\Infrastructure\View;
+
+$view = new View("Example");
 ?>
 <html>
     <?php echo $view->head(); ?>

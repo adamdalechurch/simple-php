@@ -10,12 +10,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "SimplePHP\\": "/",
-            "SimplePHP\\Core\\": "core/",
-            "SimplePHP\\Core\\Traits\\": "core/traits/",
             "SimplePHP\\Core\\Models\\": "core/models/",
-            "SimplePHP\\Views\\": "views/",
-            "SimplePHP\\Data\\": "data/"
+            "SimplePHP\\Core\\Traits\\": "core/traits/",
+            "SimplePHP\\Core\\Data\\": "core/data/",
+            "SimplePHP\\Core\\Infrastructure\\": "core/infrastructure/",
+            "SimplePHP\\App\\Data\\": "app/data/",
+            "SimplePHP\\App\\Controllers\\": "app/controllers/",
+            "SimplePHP\\App\\Views\\": "app/views/"
         }
     },
     "require": {}

@@ -1,5 +1,5 @@
 <?php
-namespace SimplePHP\Data;
+namespace SimplePHP\App\Data;
 
 use SimplePHP\Core\Repository;
 

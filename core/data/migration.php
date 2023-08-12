@@ -1,7 +1,5 @@
 <?php
-namespace SimplePHP\Core;
-
-use SimplePHP\Core\DB;
+namespace SimplePHP\Core\Data;
 
 class Migration {
     private $db;

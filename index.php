@@ -1,7 +1,9 @@
 <?php
 namespace SimplePHP;
 
-use SimplePHP\Core\Migration;
+use SimplePHP\Core\Data\Migration;
+use SimplePHP\Core\Infrastructure\Router;
+use SimplePHP\Core\Models\Route;
 
 // load constants from .env
 require_once('core/config.php');
@@ -11,6 +13,15 @@ require_once('vendor/autoload.php');
 
 $migration = new Migration();
 
-// load views
-include_once('views/example.php');
+// load view basic:
+// include_once('views/example.php');
+
+// // use router:
+$router = new Router();
+
+// // add example route:
+$router->add_route(new Route('example', 'ExampleController', 'example', '/example'));
+
+$router->dispatch();
+
 ?>

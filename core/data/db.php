@@ -1,6 +1,6 @@
 <?php
 
-namespace SimplePHP\Core;
+namespace SimplePHP\Core\Data;
 
 use SimplePHP\Core\Traits\Queryable;
 use SimplePHP\Core\Traits\Executable;
