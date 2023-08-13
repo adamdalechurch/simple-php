@@ -1,7 +1,7 @@
 <?php
 namespace SimplePHP\App\Data;
 
-use SimplePHP\Core\Repository;
+use SimplePHP\Core\Infrastructure\Repository;
 
 class Example extends Repository {
     private $table = "example";

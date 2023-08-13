@@ -1,33 +1,29 @@
 <?php
 namespace SimplePHP\Core\Infrastructure;
 
-use SimplePHP\Core\Api;
+use SimplePHP\Core\Infratructure\Repository;
 
 class View {
-    private $repo;
-    private $items;
-    private $RepoClass;
-    private $api;
-    private $styles = [
+    private $_items;
+    private $_styles = [
         "https://classless.de/classless.css",
         "https://classless.de/addons/themes.css"
     ];
 
-    private $scripts = [
+    private $_scripts = [
         "https://code.jquery.com/jquery-3.3.1.js",
         "https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"
     ];
 
-    public function __construct($RepoClass){
-        $this->RepoClass = NAMESPACE_DATA.basename($RepoClass, ".php");
-        $this->repo = new $this->RepoClass();
-        $this->api = new Api($this->repo);
+    public function __construct(Repository $repo)
+    {
+        $this->$_repo = $repo;
         $this->push_default_scripts();
         $this->push_default_styles();
     }
 
     public function create_form(){
-        $columns = $this->repo->get_columns();
+        $columns = $this->_repo->get_columns();
         $form = "<form method='POST'>";
         foreach ($columns as $column) {
             if($column->auto_increment)
@@ -41,7 +37,7 @@ class View {
     }
 
     public function update_form($id){
-        $columns = $this->repo->get_columns();
+        $columns = $this->_repo->get_columns();
         $form = "<form method='PUT'>";
         foreach ($columns as $column) {
             $form .= "<label for='$column->name'>$column->name</label>";
@@ -57,9 +53,9 @@ class View {
     }
 
     public function list(){
-        $columns = $this->repo->get_columns();
-        $this->items = $this->repo->list();
-        $table = "<table id='$this->RepoClass-list-table'>";
+        $columns = $this->_repo->get_columns();
+        $this->_items = $this->_repo->list();
+        $table = "<table id='".$this->get_class_name()."-list-table'>";
         $table .= "<thead>";
         $table .= "<tr>";
         foreach ($columns as $column) {
@@ -69,7 +65,7 @@ class View {
         $table .= "</tr>";
         $table .= "</thead>";
         $table .= "<tbody>";
-        foreach ($this->items as $item) {
+        foreach ($this->_items as $item) {
             $table .= "<tr>";
             foreach ($columns as $column) {
                 $table .= "<td style='width:".$this->column_width($columns, $column)."%'>".$item[$column->name]."</td>";
@@ -87,7 +83,7 @@ class View {
 
     public function head(){
         $head = "<head>";
-        $head .= "<title>$this->RepoClass</title>";
+        $head .= "<title>$this->_repoClass</title>";
         foreach ($this->styles as $style) {
             $head .= "<link rel='stylesheet' href='$style' />";
         }
@@ -149,6 +145,10 @@ class View {
         
         // base value should = .25
         return (100 / count($columns)) * ($width_multiplier * .25) ;
+    }
+
+    private function get_class_name(){
+       return str_replace('Repository', '', get_class( $this->_repo ));
     }
 }
 
