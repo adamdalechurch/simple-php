@@ -4,7 +4,7 @@ namespace SimplePHP\Core\Infrastructure;
 use SimplePHP\Core\Data\DB;
 use SimplePHP\Core\Models\Column;
 
-class Repository {
+abstract class Repository {
     private $_db;
     private $_table;
     private $_columns;

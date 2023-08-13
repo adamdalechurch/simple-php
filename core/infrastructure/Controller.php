@@ -11,12 +11,12 @@ class Controller{
 
     public function __construct(Repository $repo, View $view = null){
         $this->_repo = $repo;
-        $this->_view =
+        $this->_view = $view;
     }
 
     protected function json_reponse($json){
         // to do, refine.
-        return json_encode($json)
+        return json_encode($json);
     }
 } 
 

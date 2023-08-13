@@ -4,6 +4,7 @@ namespace SimplePHP\App\Controllers;
 
 use SimplePHP\Core\Infrastructure\Controller;
 use SimplePHP\App\Data\Example;
+use SimplePHP\App\Views\ExampleView;
 
 class ExampleController extends Controller{
     public function __construct(){
@@ -11,7 +12,7 @@ class ExampleController extends Controller{
     }
 
     public function example(){
-        return $this->json_response($this->_repo->list());
+        return new ExampleView($this->_repo);
     }
 }
 ?>

@@ -1,10 +1,9 @@
 <?php
 namespace SimplePHP\Core\Infrastructure;
 
-use SimplePHP\Core\Infratructure\Repository;
-
 class View {
     private $_items;
+    private $_repo;
     private $_styles = [
         "https://classless.de/classless.css",
         "https://classless.de/addons/themes.css"
@@ -15,9 +14,9 @@ class View {
         "https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"
     ];
 
-    public function __construct(Repository $repo)
+    public function __construct($repo)
     {
-        $this->$_repo = $repo;
+        $this->_repo = $repo;
         $this->push_default_scripts();
         $this->push_default_styles();
     }
@@ -83,13 +82,11 @@ class View {
 
     public function head(){
         $head = "<head>";
-        $head .= "<title>$this->_repoClass</title>";
-        foreach ($this->styles as $style) {
+        $head .= "<title>".$this->get_class_name()."</title>";
+        foreach ($this->_styles as $style) {
             $head .= "<link rel='stylesheet' href='$style' />";
         }
-        foreach ($this->scripts as $script) {
-            $head .= "<script src='$script'></script>";
-        }
+        
         $head .= "</head>";
         return $head;
     }
@@ -97,7 +94,7 @@ class View {
     public function footer(){
         // with scripts:
         $footer = "";  
-        foreach ($this->scripts as $script) {
+        foreach ($this->_scripts as $script) {
             $footer .= "<script src='$script'></script>";
         }
     }
@@ -106,7 +103,7 @@ class View {
         foreach (scandir("core/js") as $file) {
             if($file == "." || $file == "..")
                 continue;
-            $this->scripts[] = "core/js/$file";
+            $this->_scripts[] = "core/js/$file";
         }
     }
 
@@ -114,7 +111,7 @@ class View {
         foreach (scandir("core/style") as $file) {
             if($file == "." || $file == "..")
                 continue;
-            $this->styles[] = "core/style/$file";
+            $this->_styles[] = "core/style/$file";
         }
     }
 
@@ -149,6 +146,20 @@ class View {
 
     private function get_class_name(){
        return str_replace('Repository', '', get_class( $this->_repo ));
+    }
+
+    protected function get_page(){
+        $page = "<html>";
+        $page .= $this->head();
+        $page .= "<body>";
+        $page .= $this->create_form();
+        $page .= "<div style='overflow-x:auto'>";
+        $page .= $this->list();
+        $page .= "</div>";
+        $page .= $this->footer();
+        $page .= "</body>";
+        $page .= "</html>";
+        return $page;
     }
 }
 
