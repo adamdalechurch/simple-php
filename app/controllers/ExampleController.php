@@ -12,6 +12,9 @@ class ExampleController extends Controller{
     }
 
     public function example(){
+        if($_POST)
+            $this->_repo->insert($_POST);
+
         return new ExampleView($this->_repo);
     }
 }

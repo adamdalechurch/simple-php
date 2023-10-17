@@ -21,6 +21,7 @@ $router = new Router();
 
 // // add example route:
 $router->add_route(new Route('example', 'ExampleController', 'example', '/example'));
+$router->add_route(new Route('example', 'ExampleController', 'example', '/example', 'POST'));
 
 $router->dispatch();
 
