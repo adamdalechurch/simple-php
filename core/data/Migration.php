@@ -11,13 +11,13 @@ class Migration {
     }
 
     private function create_db(){
-        $sql = "CREATE DATABASE IF NOT EXISTS ".DBNAME;        
+        $sql = "CREATE DATABASE IF NOT EXISTS ".DBNAME;
         return $this->db->execute($sql);
     }
 
     private function up(){
         //loop through all classes in the data namespace
-        foreach (glob("data/*.php") as $filename) {
+        foreach (glob("app/data/*.php") as $filename) {
             $repo = NAMESPACE_DATA.basename($filename, ".php");
             $repo = new $repo();
             $repo->create_table();
