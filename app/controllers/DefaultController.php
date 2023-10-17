@@ -8,6 +8,10 @@ class DefaultController{
     }
 
     public function not_found(){
-        echo '404';
+        echo '404 Not Found';
     }
+
+    public function method_not_allowed(){
+		echo '405 Method Not Allowed';
+	}
 }

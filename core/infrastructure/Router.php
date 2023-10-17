@@ -45,6 +45,14 @@ class Router{
         $url = $this->remove_query_string($url);
         $url = $this->remove_trailing_slash($url);
         $route = $this->get_route_from_url($url);
+
+        // validate request_method:
+        if($route && isset($route->request_method) && $route->method != 'ANY'){
+			if($route->method != $_SERVER['REQUEST_METHOD']){
+				// call method not allowed:
+                $this->call_controller_method($this->get_route_from_url('/405'));
+			}
+		}
     
         if($route){
             $this->call_controller_method($route);
